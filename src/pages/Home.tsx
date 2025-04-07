@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-type User = {
+interface User {
     id: number
     name: string
     email: string
@@ -13,9 +13,12 @@ export default function Dashboard() {
     const [users, setUsers] = useState<User[]>([])
     
     useEffect(() => {
-        fetch('https://jsonplaceholder.typicode.com/users')
-            .then(res => res.json())
-            .then(data => setUsers(data))
+        const fetchUsers = async () => {    
+            const res = await fetch('https://jsonplaceholder.typicode.com/users')
+            const data = (await res.json()) as User[]
+            setUsers(data)
+        }
+        void fetchUsers()
     }, [])
 
     return (

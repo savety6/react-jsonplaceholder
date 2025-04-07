@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-type User = {
+interface User {
     id: number
     name: string
     email: string
@@ -14,9 +14,12 @@ export default function User() {
     const [user, setUser] = useState<User | null>(null)
 
     useEffect(() => {
-        fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
-            .then(res => res.json())
-            .then(data => setUser(data))
+        const fetchUser = async () => {
+            const res = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
+            const data = (await res.json()) as User
+            setUser(data)
+        }
+        void fetchUser()
     }, [id])
 
     return (
