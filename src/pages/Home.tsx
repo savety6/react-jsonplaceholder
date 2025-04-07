@@ -1,38 +1,25 @@
-import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { useGetUsersQuery } from '../features/api/api-slice'
+// import { User } from '../types/UserType'
 
-interface User {
-    id: number
-    name: string
-    email: string
-    phone: string
-    website: string
-}
 
-export default function Dashboard() {
-    const [users, setUsers] = useState<User[]>([])
-    
-    useEffect(() => {
-        const fetchUsers = async () => {    
-            const res = await fetch('https://jsonplaceholder.typicode.com/users')
-            const data = (await res.json()) as User[]
-            setUsers(data)
-        }
-        void fetchUsers()
-    }, [])
-
+export default function hOME() {
+    const { data = [], isFetching, } = useGetUsersQuery(16)
     return (
         <div>
-            <h1>Dashboard</h1>
-            <ul>
-                {users.map(user => (
-                    <Link to={`/users/${user.id}`}>
+            <main>
+                {isFetching && <p>Loading...</p>}
+                <h1>Number of users: {data.length}</h1>
+                <ul>
+                    {data.map(user => (
                         <li key={user.id}>
-                            <h2>{user.name}</h2>
+                            <Link to={`/users/${user.id}`}>
+                                <h2>{user.name}</h2>
+                            </Link>
                         </li>
-                    </Link>
-                ))}
-            </ul>
+                    ))}
+                </ul>
+            </main>
         </div>
     )
 }

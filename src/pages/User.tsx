@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { useGetUserByIdQuery } from '../features/api/api-slice'
 
 interface User {
     id: number
@@ -11,23 +11,18 @@ interface User {
 
 export default function User() {
     const { id } = useParams()
-    const [user, setUser] = useState<User | null>(null)
-
-    useEffect(() => {
-        const fetchUser = async () => {
-            const res = await fetch(`https://jsonplaceholder.typicode.com/users/${id}`)
-            const data = (await res.json()) as User
-            setUser(data)
-        }
-        void fetchUser()
-    }, [id])
+    const { data: user, isFetching } = useGetUserByIdQuery(Number(id))
 
     return (
         <div>
-            <h1>{user?.name}</h1>
-            <p>{user?.email}</p>
-            <p>{user?.phone}</p>
-            <p>{user?.website}</p>
+            {isFetching ? <p>Loading...</p> : (
+                <>
+                    <h1>{user?.name}</h1>
+                    <p>{user?.email}</p>
+                    <p>{user?.phone}</p>
+                    <p>{user?.website}</p>
+                </>
+            )}
         </div>
     )
 }
