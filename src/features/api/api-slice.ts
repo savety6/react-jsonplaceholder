@@ -8,7 +8,7 @@ export const apiSlice = createApi({
     baseQuery: fetchBaseQuery({ baseUrl: "https://jsonplaceholder.typicode.com" }),
     endpoints: (builder) => ({
         getUsers: builder.query<User[], number | void>({
-            query: (limit = 10) => `/users?_limit=${limit}`
+            query: (limit) => `/users?_limit=${limit ?? 10}`
         }),
         getUserById: builder.query<User, number>({
             query: (id) => `/users/${id}`

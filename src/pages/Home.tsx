@@ -3,7 +3,7 @@ import { useGetUsersQuery } from '../features/api/api-slice'
 // import { User } from '../types/UserType'
 
 
-export default function hOME() {
+export default function Home() {
     const { data = [], isFetching, } = useGetUsersQuery(16)
     return (
         <div>
