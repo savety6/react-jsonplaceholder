@@ -5,8 +5,8 @@
 ### TODO 
 
 - [ ] Set Redux and redux-toolkit state management system
-- [*] Set UI Library Antd
-- [*] Set React Router
+- [x] Set UI Library Antd
+- [x] Set React Router
 - [ ] Use the public JSONPlaceholder API to fetch and display 10 users on the home
 page of the application
 - [ ] Display the users as a vertical list of collapsible sections amd make them editable
