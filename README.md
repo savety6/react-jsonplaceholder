@@ -20,6 +20,6 @@ on the home page)
 - [x] Fetch and display a list of posts for the given user id
 - [x] Posts should be editable and deletable through the JSONPlaceholder API - use a
 confirmation popup for the delete functionality
-- [ ]    Fetch and display a list of tasks with filtering options and change the status of
+- [x]    Fetch and display a list of tasks with filtering options and change the status of
 the task
 - [ ] Add unit tests
