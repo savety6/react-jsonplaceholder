@@ -12,9 +12,10 @@ const { Panel } = Collapse
 
 type Props = {
     user: UserType
+    onUserDeleted?: (userId: number) => void
 }
 
-export default function ListItem({ user }: Props) {
+export default function ListItem({ user, onUserDeleted }: Props) {
     const [form] = Form.useForm()
     const [isEditing, setIsEditing] = useState(false)
     const [hasChanges, setHasChanges] = useState(false)
@@ -32,9 +33,6 @@ export default function ListItem({ user }: Props) {
 
     const handleUpdateUser = async (values: Partial<UserType>) => {
         try {
-            // Form validation will be handled by Ant Design's form validation rules
-            // which will prevent this function from being called if validation fails
-            
             const updatedUser = {
                 ...localUser,
                 ...values,
@@ -43,8 +41,6 @@ export default function ListItem({ user }: Props) {
                     ...values.address,
                 },
             }
-            
-            // Submit to API if all validations pass
             await updateUser(updatedUser).unwrap()
             setLocalUser(updatedUser)
             form.setFieldsValue(updatedUser)
@@ -53,7 +49,6 @@ export default function ListItem({ user }: Props) {
             setOriginalValues(null)
             message.success('User updated successfully')
         } catch (error) {
-            // Handle API errors
             message.error('Failed to update user')
         }
     }
@@ -61,6 +56,9 @@ export default function ListItem({ user }: Props) {
     const handleDeleteUser = async () => {
         try {
             await deleteUser(localUser.id).unwrap()
+            if (onUserDeleted) {
+                onUserDeleted(localUser.id)
+            }
             message.success('User deleted successfully')
         } catch (error) {
             message.error('Failed to delete user')
