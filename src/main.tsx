@@ -10,6 +10,7 @@ import Home from './pages/Home.tsx'
 import NotFound from './pages/NotFound.tsx'
 import User from './pages/User.tsx'
 import Layout from './components/Layout.tsx'
+import Tasks from './pages/Tasks.tsx'
 
 const router = createBrowserRouter([
 	{
@@ -17,6 +18,7 @@ const router = createBrowserRouter([
 		children: [
 			{ path: '/', element: <Home /> },
 			{ path: '/users/:id', element: <User /> },
+			{ path: '/tasks', element: <Tasks /> },
 			{ path: "*", element: <NotFound /> }
 		]
 	}
