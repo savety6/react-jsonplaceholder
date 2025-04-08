@@ -9,11 +9,17 @@ import store from './context/store'
 import Home from './pages/Home.tsx'
 import NotFound from './pages/NotFound.tsx'
 import User from './pages/User.tsx'
+import Layout from './components/Layout.tsx'
 
 const router = createBrowserRouter([
-	{ path: '/', element: <Home /> },
-	{ path: '/users/:id', element: <User /> },
-	{ path: "*", element: <NotFound /> }
+	{
+		element: <Layout />,
+		children: [
+			{ path: '/', element: <Home /> },
+			{ path: '/users/:id', element: <User /> },
+			{ path: "*", element: <NotFound /> }
+		]
+	}
 ])
 
 createRoot(document.getElementById('root')!).render(
@@ -21,5 +27,5 @@ createRoot(document.getElementById('root')!).render(
 		<Provider store={store}>
 			<RouterProvider router={router} />
 		</Provider>
-	</StrictMode>,
+	</StrictMode>
 )
