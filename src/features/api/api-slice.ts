@@ -6,6 +6,7 @@ import { Todo } from '../../types/TodoType'
 export const apiSlice = createApi({
     reducerPath: "api",
     baseQuery: fetchBaseQuery({ baseUrl: "https://jsonplaceholder.typicode.com" }),
+    tagTypes: ['Todo'],
     endpoints: (builder) => ({
         getUsers: builder.query<User[], number | void>({
             query: (limit) => `/users?_limit=${limit ?? 10}`
@@ -16,8 +17,25 @@ export const apiSlice = createApi({
         getPostsByUserId: builder.query<Post[], number>({
             query: (userId) => `/posts?userId=${userId}`
         }),
-        getTodosByUserId: builder.query<Todo[], void>({
-            query: () => `/todos`
+        getTodos: builder.query<Todo[], void>({
+            query: () => `/todos`,
+            providesTags: (result) =>
+                result
+                    ? [
+                        ...result.map(({ id }) => ({ type: 'Todo' as const, id })),
+                        { type: 'Todo', id: 'LIST' },
+                      ]
+                    : [{ type: 'Todo', id: 'LIST' }],
+        }),
+        getTodosByUserId: builder.query<Todo[], number>({
+            query: (userId) => `/todos?userId=${userId}`,
+            providesTags: (result) =>
+                result
+                    ? [
+                        ...result.map(({ id }) => ({ type: 'Todo' as const, id })),
+                        { type: 'Todo', id: 'LIST' },
+                      ]
+                    : [{ type: 'Todo', id: 'LIST' }],
         }),
         // Mutations
         addUser: builder.mutation<User, User>({
@@ -54,6 +72,15 @@ export const apiSlice = createApi({
                 method: 'DELETE'
             })
         }),
+        // Todo mutations
+        updateTodo: builder.mutation<Todo, Todo>({
+            query: (todo) => ({
+                url: `/todos/${todo.id}`,
+                method: 'PUT',
+                body: todo
+            }),
+            invalidatesTags: (_result, _error, { id }) => [{ type: 'Todo', id }]
+        }),
     })
 })
 
@@ -61,12 +88,13 @@ export const {
     useGetUsersQuery, 
     useGetUserByIdQuery, 
     useGetPostsByUserIdQuery, 
+    useGetTodosQuery,
     useGetTodosByUserIdQuery,
     // Mutations
     useAddUserMutation,
     useUpdateUserMutation,
     useDeleteUserMutation,
-    // Post mutations
     useUpdatePostMutation,
-    useDeletePostMutation
+    useDeletePostMutation,
+    useUpdateTodoMutation
 } = apiSlice

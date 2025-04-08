@@ -10,9 +10,10 @@ const Header = () => {
             label: <Link to="/">Home</Link>
         },
         {
-            key: 'todo',
-            label: <Link to="/todo">ToDo</Link>
-        }
+            key: 'tasks',
+            label: <Link to="/tasks">Tasks</Link>
+        },
+        
     ];
 
     return (
