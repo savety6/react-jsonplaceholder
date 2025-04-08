@@ -1,4 +1,4 @@
-import { Collapse, Button, Space, message, Form } from 'antd'
+import { Collapse, Button, Space, message, Form, Modal, Typography } from 'antd'
 import { ChevronDown } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { User as UserType } from '../../types/UserType'
@@ -9,6 +9,7 @@ import UserDetailsView from './UserDetailsView'
 import UserEditForm from './UserEditForm'
 
 const { Panel } = Collapse
+const { Text } = Typography
 
 interface Props {
     user: UserType
@@ -21,6 +22,7 @@ export default function ListItem({ user, onUserDeleted }: Props) {
     const [hasChanges, setHasChanges] = useState(false)
     const [localUser, setLocalUser] = useState(user)
     const [originalValues, setOriginalValues] = useState<UserType | null>(null)
+    const [deleteModalVisible, setDeleteModalVisible] = useState(false)
 
     const [updateUser, { isLoading: isUpdating }] = useUpdateUserMutation()
     const [deleteUser, { isLoading: isDeleting }] = useDeleteUserMutation()
@@ -53,15 +55,21 @@ export default function ListItem({ user, onUserDeleted }: Props) {
         }
     }
 
+    const showDeleteConfirm = () => {
+        setDeleteModalVisible(true)
+    }
+
     const handleDeleteUser = async () => {
         try {
             await deleteUser(localUser.id).unwrap()
             if (onUserDeleted) {
                 onUserDeleted(localUser.id)
             }
+            setDeleteModalVisible(false)
             message.success('User deleted successfully')
         } catch {
             message.error('Failed to delete user')
+            setDeleteModalVisible(false)
         }
     }
 
@@ -102,66 +110,85 @@ export default function ListItem({ user, onUserDeleted }: Props) {
     }
 
     return (
-        <Collapse
-            className="list-item"
-            expandIcon={({ isActive }) => (
-                <ChevronDown
-                    style={{
-                        transform: `rotate(${isActive ? 180 : 0}deg)`,
-                        transition: 'transform 0.3s',
-                        position: 'absolute',
-                        right: '16px',
-                        top: '50%',
-                        marginTop: '-12px',
-                    }}
-                />
-            )}
-            expandIconPosition="right"
-        >
-            <Panel header={<UserHeader user={localUser} />} key={localUser.id.toString()} style={{ borderRadius: '8px' }}>
-                <div style={{ padding: '16px' }}>
-                    {isEditing ? (
-                        <UserEditForm
-                            form={form}
-                            initialUser={localUser}
-                            onSubmit={(values) => {
-                                void handleUpdateUser(values);
-                            }}
-                            onCancel={handleCancel}
-                            onRevert={handleRevert}
-                            isLoading={isUpdating}
-                            hasChanges={hasChanges}
-                            onChange={handleValuesChange}
-                        />
-                    ) : (
-                        <>
-                            <UserDetailsView user={localUser} />
-                            <Space>
-                                <Button
-                                    type="primary"
-                                    onClick={() => {
-                                        const userCopy = { ...localUser, address: { ...localUser.address } };
-                                        setOriginalValues(userCopy)
-                                        setIsEditing(true)
-                                        form.setFieldsValue(localUser)
-                                    }}
-                                >
-                                    Edit
-                                </Button>
-                                <Button 
-                                    danger 
-                                    onClick={() => {
-                                        void handleDeleteUser();
-                                    }} 
-                                    loading={isDeleting}
-                                >
-                                    Delete
-                                </Button>
-                            </Space>
-                        </>
-                    )}
+        <>
+            <Collapse
+                className="list-item"
+                expandIcon={({ isActive }) => (
+                    <ChevronDown
+                        style={{
+                            transform: `rotate(${isActive ? 180 : 0}deg)`,
+                            transition: 'transform 0.3s',
+                            position: 'absolute',
+                            right: '16px',
+                            top: '50%',
+                            marginTop: '-12px',
+                        }}
+                    />
+                )}
+                expandIconPosition="right"
+            >
+                <Panel header={<UserHeader user={localUser} />} key={localUser.id.toString()} style={{ borderRadius: '8px' }}>
+                    <div style={{ padding: '16px' }}>
+                        {isEditing ? (
+                            <UserEditForm
+                                form={form}
+                                initialUser={localUser}
+                                onSubmit={(values) => {
+                                    void handleUpdateUser(values);
+                                }}
+                                onCancel={handleCancel}
+                                onRevert={handleRevert}
+                                isLoading={isUpdating}
+                                hasChanges={hasChanges}
+                                onChange={handleValuesChange}
+                            />
+                        ) : (
+                            <>
+                                <UserDetailsView user={localUser} />
+                                <Space>
+                                    <Button
+                                        type="primary"
+                                        onClick={() => {
+                                            const userCopy = { ...localUser, address: { ...localUser.address } };
+                                            setOriginalValues(userCopy)
+                                            setIsEditing(true)
+                                            form.setFieldsValue(localUser)
+                                        }}
+                                    >
+                                        Edit
+                                    </Button>
+                                    <Button 
+                                        danger 
+                                        onClick={showDeleteConfirm} 
+                                        loading={isDeleting}
+                                    >
+                                        Delete
+                                    </Button>
+                                </Space>
+                            </>
+                        )}
+                    </div>
+                </Panel>
+            </Collapse>
+            
+            {/* Delete Confirmation Modal */}
+            <Modal
+                title="Confirm Delete"
+                open={deleteModalVisible}
+                onOk={handleDeleteUser}
+                onCancel={() => setDeleteModalVisible(false)}
+                okText="Delete"
+                cancelText="Cancel"
+                okButtonProps={{ loading: isDeleting, danger: true }}
+            >
+                <Text>Are you sure you want to delete this user?</Text>
+                <div style={{ marginTop: '8px' }}>
+                    <Text strong>{localUser.name}</Text>
+                    <div>
+                        <Text type="secondary">{localUser.email}</Text>
+                    </div>
                 </div>
-            </Panel>
-        </Collapse>
+            </Modal>
+        </>
     )
 }
