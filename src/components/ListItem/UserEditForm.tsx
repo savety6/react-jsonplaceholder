@@ -1,8 +1,9 @@
 import { Form, Input, Button, Space } from 'antd'
 import { User as UserType } from '../../types/UserType'
+import { FormInstance } from 'antd/lib/form'
 
-type Props = {
-    form: any
+interface Props {
+    form: FormInstance
     initialUser: UserType
     onSubmit: (values: Partial<UserType>) => void
     onCancel: () => void
