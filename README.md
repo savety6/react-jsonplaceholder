@@ -14,12 +14,12 @@ page of the application
 address.city are mandatory
 - [x] Implement cancel/revert and submit buttons (should only be active when changes
 are made)
-- [ ] Add a button ’See posts’ that redirects to a new page
-- [ ] Display the user details at the top of the page (information should be editable as
+- [x] Add a button ’See posts’ that redirects to a new page
+- [x] Display the user details at the top of the page (information should be editable as
 on the home page)
-- [ ] Fetch and display a list of posts for the given user id
-- [ ] Posts should be editable and deletable through the JSONPlaceholder API - use a
+- [x] Fetch and display a list of posts for the given user id
+- [x] Posts should be editable and deletable through the JSONPlaceholder API - use a
 confirmation popup for the delete functionality
-- [ ] Fetch and display a list of tasks with filtering options and change the status of
+- [ ]    Fetch and display a list of tasks with filtering options and change the status of
 the task
 - [ ] Add unit tests
