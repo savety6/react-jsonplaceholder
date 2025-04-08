@@ -10,7 +10,7 @@ import UserEditForm from './UserEditForm'
 
 const { Panel } = Collapse
 
-type Props = {
+interface Props {
     user: UserType
     onUserDeleted?: (userId: number) => void
 }
@@ -48,7 +48,7 @@ export default function ListItem({ user, onUserDeleted }: Props) {
             setIsEditing(false)
             setOriginalValues(null)
             message.success('User updated successfully')
-        } catch (error) {
+        } catch {
             message.error('Failed to update user')
         }
     }
@@ -60,7 +60,7 @@ export default function ListItem({ user, onUserDeleted }: Props) {
                 onUserDeleted(localUser.id)
             }
             message.success('User deleted successfully')
-        } catch (error) {
+        } catch {
             message.error('Failed to delete user')
         }
     }
@@ -80,7 +80,7 @@ export default function ListItem({ user, onUserDeleted }: Props) {
     }
 
     const handleValuesChange = () => {
-        const current = form.getFieldsValue()
+        const current = form.getFieldsValue() as Record<string, unknown>
 
         if (!originalValues) {
             setHasChanges(false)
@@ -92,8 +92,10 @@ export default function ListItem({ user, onUserDeleted }: Props) {
         )
 
         const addressFieldsChanged = ['street', 'suite', 'city', 'zipcode'].some(
-            (key) =>
-                current.address?.[key] !== originalValues.address?.[key as keyof typeof originalValues.address]
+            (key) => {
+                const currentAddress = current.address as Record<string, unknown> | undefined;
+                return currentAddress?.[key] !== originalValues.address?.[key as keyof typeof originalValues.address];
+            }
         )
 
         setHasChanges(simpleFieldsChanged || addressFieldsChanged)
@@ -122,7 +124,9 @@ export default function ListItem({ user, onUserDeleted }: Props) {
                         <UserEditForm
                             form={form}
                             initialUser={localUser}
-                            onSubmit={handleUpdateUser}
+                            onSubmit={(values) => {
+                                void handleUpdateUser(values);
+                            }}
                             onCancel={handleCancel}
                             onRevert={handleRevert}
                             isLoading={isUpdating}
@@ -136,14 +140,21 @@ export default function ListItem({ user, onUserDeleted }: Props) {
                                 <Button
                                     type="primary"
                                     onClick={() => {
-                                        setOriginalValues({ ...localUser, address: { ...localUser.address } })
+                                        const userCopy = { ...localUser, address: { ...localUser.address } };
+                                        setOriginalValues(userCopy)
                                         setIsEditing(true)
                                         form.setFieldsValue(localUser)
                                     }}
                                 >
                                     Edit
                                 </Button>
-                                <Button danger onClick={handleDeleteUser} loading={isDeleting}>
+                                <Button 
+                                    danger 
+                                    onClick={() => {
+                                        void handleDeleteUser();
+                                    }} 
+                                    loading={isDeleting}
+                                >
                                     Delete
                                 </Button>
                             </Space>
