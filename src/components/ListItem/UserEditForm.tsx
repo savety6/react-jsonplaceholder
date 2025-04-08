@@ -14,7 +14,6 @@ type Props = {
 
 export default function UserEditForm({
     form,
-    initialUser,
     onSubmit,
     onCancel,
     onRevert,
@@ -28,12 +27,14 @@ export default function UserEditForm({
             layout="vertical"
             onFinish={onSubmit}
             onValuesChange={onChange}
-            initialValues={initialUser}
         >
             <Form.Item
                 name="name"
                 label="Name"
-                rules={[{ required: true, message: 'Please input name!' }]}
+                rules={[
+                    { required: true, message: 'Please input name!' },
+                    { min: 2, message: 'Name must be at least 2 characters!' }
+                ]}
             >
                 <Input />
             </Form.Item>
@@ -44,6 +45,10 @@ export default function UserEditForm({
                 rules={[
                     { required: true, message: 'Please input username!' },
                     { min: 3, message: 'Username must be at least 3 characters!' },
+                    { 
+                        pattern: /^[a-zA-Z0-9_]+$/, 
+                        message: 'Username must contain only letters, numbers, or underscores!' 
+                    }
                 ]}
             >
                 <Input />
@@ -54,7 +59,7 @@ export default function UserEditForm({
                 label="Email"
                 rules={[
                     { required: true, message: 'Please input email!' },
-                    { type: 'email', message: 'Please enter a valid email!' },
+                    { type: 'email', message: 'Please enter a valid email!' }
                 ]}
             >
                 <Input />
@@ -65,7 +70,7 @@ export default function UserEditForm({
                 label="Street"
                 rules={[
                     { required: true, message: 'Please input street!' },
-                    { min: 3, message: 'Street must be at least 3 characters!' },
+                    { min: 3, message: 'Street must be at least 3 characters!' }
                 ]}
             >
                 <Input />
@@ -85,12 +90,25 @@ export default function UserEditForm({
                 rules={[
                     { required: true, message: 'Please input city!' },
                     { min: 2, message: 'City must be at least 2 characters!' },
+                    {
+                        pattern: /^[A-ZА-Я]/, 
+                        message: 'City must start with a capital letter!'
+                    }
                 ]}
             >
                 <Input />
             </Form.Item>
 
-            <Form.Item name={['address', 'zipcode']} label="Zipcode">
+            <Form.Item 
+                name={['address', 'zipcode']} 
+                label="Zipcode"
+                rules={[
+                    { 
+                        pattern: /^[\d-]+$/, 
+                        message: 'Zipcode must contain only digits and dashes!' 
+                    }
+                ]}
+            >
                 <Input />
             </Form.Item>
 

@@ -32,6 +32,9 @@ export default function ListItem({ user }: Props) {
 
     const handleUpdateUser = async (values: Partial<UserType>) => {
         try {
+            // Form validation will be handled by Ant Design's form validation rules
+            // which will prevent this function from being called if validation fails
+            
             const updatedUser = {
                 ...localUser,
                 ...values,
@@ -40,7 +43,8 @@ export default function ListItem({ user }: Props) {
                     ...values.address,
                 },
             }
-
+            
+            // Submit to API if all validations pass
             await updateUser(updatedUser).unwrap()
             setLocalUser(updatedUser)
             form.setFieldsValue(updatedUser)
@@ -49,6 +53,7 @@ export default function ListItem({ user }: Props) {
             setOriginalValues(null)
             message.success('User updated successfully')
         } catch (error) {
+            // Handle API errors
             message.error('Failed to update user')
         }
     }
@@ -135,6 +140,7 @@ export default function ListItem({ user }: Props) {
                                     onClick={() => {
                                         setOriginalValues({ ...localUser, address: { ...localUser.address } })
                                         setIsEditing(true)
+                                        form.setFieldsValue(localUser)
                                     }}
                                 >
                                     Edit
