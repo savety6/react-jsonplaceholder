@@ -1,8 +1,10 @@
+import { Typography } from 'antd'
 
-type Props = {}
-
-export default function Tasks({ }: Props) {
+export default function Tasks() {
     return (
-        <div>Tasks</div>
+        <div>
+            <Typography.Title level={2}>Tasks</Typography.Title>
+            <p>This page is under development.</p>
+        </div>
     )
 }

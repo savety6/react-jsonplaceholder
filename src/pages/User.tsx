@@ -218,7 +218,9 @@ export default function UserPage() {
                 hasChanges={userHasChanges}
                 isLoading={isUpdatingUser}
                 onEdit={handleUserEdit}
-                onUpdate={handleUserUpdate}
+                onUpdate={(values) => {
+                    void handleUserUpdate(values);
+                }}
                 onCancel={handleUserCancel}
                 onRevert={handleUserRevert}
                 onChange={handleUserValuesChange}
@@ -236,8 +238,12 @@ export default function UserPage() {
                 isDeleting={isDeletingPost}
                 postHasChanges={postHasChanges}
                 onEdit={handlePostEdit}
-                onUpdate={handlePostUpdate}
-                onDelete={handleDeletePost}
+                onUpdate={(values) => {
+                    void handlePostUpdate(values);
+                }}
+                onDelete={(post) => {
+                    void handleDeletePost(post);
+                }}
                 onRevert={handlePostRevert}
                 onCancel={handlePostCancel}
                 onChange={handlePostValuesChange}

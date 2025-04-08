@@ -175,7 +175,9 @@ export default function ListItem({ user, onUserDeleted }: Props) {
             <Modal
                 title="Confirm Delete"
                 open={deleteModalVisible}
-                onOk={handleDeleteUser}
+                onOk={() => {
+                    void handleDeleteUser();
+                }}
                 onCancel={() => setDeleteModalVisible(false)}
                 okText="Delete"
                 cancelText="Cancel"

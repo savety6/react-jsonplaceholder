@@ -97,7 +97,9 @@ export default function PostList({
             <Modal
                 title="Confirm Delete"
                 open={deleteModalVisible}
-                onOk={handleDeleteConfirm}
+                onOk={() => {
+                    void handleDeleteConfirm();
+                }}
                 onCancel={() => setDeleteModalVisible(false)}
                 okText="Delete"
                 cancelText="Cancel"
