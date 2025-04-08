@@ -18,8 +18,38 @@ export const apiSlice = createApi({
         }),
         getTodosByUserId: builder.query<Todo[], void>({
             query: () => `/todos`
-        })
+        }),
+        // Mutations
+        addUser: builder.mutation<User, User>({
+            query: (user) => ({
+                url: '/users',
+                method: 'POST',
+                body: user
+            })
+        }),
+        updateUser: builder.mutation<User, User>({
+            query: (user) => ({
+                url: `/users/${user.id}`,
+                method: 'PUT',
+                body: user
+            })
+        }),
+        deleteUser: builder.mutation<User, number>({
+            query: (id) => ({
+                url: `/users/${id}`,
+                method: 'DELETE'
+            })
+        }),
     })
 })
 
-export const { useGetUsersQuery, useGetUserByIdQuery } = apiSlice
+export const { 
+    useGetUsersQuery, 
+    useGetUserByIdQuery, 
+    useGetPostsByUserIdQuery, 
+    useGetTodosByUserIdQuery,
+    // Mutations
+    useAddUserMutation,
+    useUpdateUserMutation,
+    useDeleteUserMutation
+} = apiSlice
