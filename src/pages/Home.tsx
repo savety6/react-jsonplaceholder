@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react'
 import { User } from '../types/UserType'
 
 export default function Home() {
-    const { data = [], isFetching } = useGetUsersQuery(16)
+    const { data = [], isFetching, error } = useGetUsersQuery(16)
     const [users, setUsers] = useState<User[]>([])
     
     useEffect(() => {
@@ -18,6 +18,9 @@ export default function Home() {
         setUsers(users.filter(user => user.id !== userId))
     }
 
+    if (error || data.length === 0) {
+        return <div role='status'>Error: Something went wrong</div>
+    }
     return (
         <div style={{ padding: '24px' }}>
             <main>
