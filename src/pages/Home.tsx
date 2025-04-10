@@ -22,7 +22,7 @@ export default function Home() {
         <div style={{ padding: '24px' }}>
             <main>
                 {isFetching ? (
-                    <div style={{ textAlign: 'center', padding: '24px' }}>
+                    <div style={{ textAlign: 'center', padding: '24px' }} role="status">
                         <Spin size="large" />
                     </div>
                 ) : (
