@@ -27,7 +27,7 @@ const user = {
 
 export const handlers = [
     http.get('/api/data', () => {
-        return Response.json({ data: 'mocked data' });
+        return HttpResponse.json({ data: 'mocked data' });
     }),
     // Add more handlers as needed
     http.get('https://jsonplaceholder.typicode.com/users', () => {
@@ -63,8 +63,8 @@ export const handlers = [
     }),
     http.put('https://jsonplaceholder.typicode.com/todos/:id', async ({ request, params }) => {
         const id = params.id;
-        const updatedTodo = await request.json() as { title: string; completed: boolean; userId: number };
-        return HttpResponse.json({ ...updatedTodo, id: Number(id) });
+        const data = await request.json() as Record<string, unknown>;
+        return HttpResponse.json({ ...data, id: Number(id) });
     }),
     http.get('https://jsonplaceholder.typicode.com/users/1', () => {
         return HttpResponse.json(user);
@@ -97,4 +97,4 @@ export const handlers = [
         return HttpResponse.json({ id: 1, title: 'Updated Post', body: 'Updated Body', userId: 1 })
     }),
     
-];
+]; 
