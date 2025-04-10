@@ -48,18 +48,32 @@ export const handlers = [
     http.get('https://jsonplaceholder.typicode.com/users/1', () => {
         return HttpResponse.json(user);
     }),
-    http.get('https://jsonplaceholder.typicode.com/posts', ({ request }) => {
+    http.get('https://jsonplaceholder.typicode.com/posts', async ({ request }) => {
         const url = new URL(request.url)
         const userId = url.searchParams.get('userId')
         
+        // Simulate network delay
+        await new Promise(resolve => setTimeout(resolve, 100))
+        
         if (userId === '1') {
             return HttpResponse.json([
-                { id: 1, title: 'Post One' },
-                { id: 2, title: 'Post Two' },
-                { id: 3, title: 'Post Three' },
+                { id: 1, title: 'Post One', body: 'Body One', userId: 1 },
+                { id: 2, title: 'Post Two', body: 'Body Two', userId: 1 },
+                { id: 3, title: 'Post Three', body: 'Body Three', userId: 1 },
+                { id: 4, title: 'Post Four', body: 'Body Four', userId: 1 },
+                { id: 5, title: 'Post Five', body: 'Body Five', userId: 1 },
+                { id: 6, title: 'Post Six', body: 'Body Six', userId: 1 },
+                { id: 7, title: 'Post Seven', body: 'Body Seven', userId: 1 },
+                { id: 8, title: 'Post Eight', body: 'Body Eight', userId: 1 },
+                { id: 9, title: 'Post Nine', body: 'Body Nine', userId: 1 },
+                { id: 10, title: 'Post Ten', body: 'Body Ten', userId: 1 },
             ]);
         }
         
         return HttpResponse.json([]);
     }),
+    http.put('https://jsonplaceholder.typicode.com/posts/1', () => {
+        return HttpResponse.json({ id: 1, title: 'Updated Post', body: 'Updated Body', userId: 1 })
+    }),
+    
 ];
