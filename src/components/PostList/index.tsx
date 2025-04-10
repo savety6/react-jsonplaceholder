@@ -58,8 +58,9 @@ export default function PostList({
             <Title level={3}>User Posts ({posts.length})</Title>
             
             {isFetchingPosts ? (
-                <div style={{ textAlign: 'center', padding: '24px' }}>
+                <div style={{ textAlign: 'center', padding: '24px' }} role='status'>
                     <Spin size="large" />
+                    <Text>Loading posts...</Text>
                 </div>
             ) : (
                 <List

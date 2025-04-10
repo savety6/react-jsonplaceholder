@@ -30,7 +30,7 @@ export const handlers = [
         return Response.json({ data: 'mocked data' });
     }),
     // Add more handlers as needed
-    http.get('https://jsonplaceholder.typicode.com/users', ({  }) => {
+    http.get('https://jsonplaceholder.typicode.com/users', () => {
         return HttpResponse.json([
             { id: 1, name: 'User One' },
             { id: 2, name: 'User Two' },
@@ -45,14 +45,21 @@ export const handlers = [
             // Add more mock users as needed
         ]);
     }),
-    http.get('https://jsonplaceholder.typicode.com/users/1', ({  }) => {
+    http.get('https://jsonplaceholder.typicode.com/users/1', () => {
         return HttpResponse.json(user);
     }),
-    http.get('https://jsonplaceholder.typicode.com/posts?userId=1', ({  }) => {
-        return HttpResponse.json([
-            { id: 1, title: 'Post One' },
-            { id: 2, title: 'Post Two' },
-            { id: 3, title: 'Post Three' },
-        ]);
+    http.get('https://jsonplaceholder.typicode.com/posts', ({ request }) => {
+        const url = new URL(request.url)
+        const userId = url.searchParams.get('userId')
+        
+        if (userId === '1') {
+            return HttpResponse.json([
+                { id: 1, title: 'Post One' },
+                { id: 2, title: 'Post Two' },
+                { id: 3, title: 'Post Three' },
+            ]);
+        }
+        
+        return HttpResponse.json([]);
     }),
 ];
