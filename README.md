@@ -1,6 +1,6 @@
 # Web application that consumes JSONPlaceholder API
 
-## You can find live demo [here](https://egt-digital.netlify.app/)
+## You can find live demo here [https://egt-digital.netlify.app/](https://egt-digital.netlify.app/)
 
 ### TODO 
 
@@ -22,4 +22,4 @@ on the home page)
 confirmation popup for the delete functionality
 - [x]    Fetch and display a list of tasks with filtering options and change the status of
 the task
-- [ ] Add unit tests
+- [x] Add unit tests
