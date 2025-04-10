@@ -29,13 +29,13 @@ describe('User Page', () => {
         renderPage()
         const editProfileButton = await screen.findByText(/edit profile/i)
         expect(editProfileButton).toBeInTheDocument()
-        fireEvent.click(editProfileButton!)
+        fireEvent.click(editProfileButton)
         const nameInput = await screen.findByDisplayValue(/leanne graham/i)
         expect(nameInput).toBeInTheDocument()
         fireEvent.change(nameInput, { target: { value: 'John Doe' } })
         const saveButton = await screen.findByText(/save/i)
         expect(saveButton).toBeInTheDocument()
-        fireEvent.click(saveButton!)
+        fireEvent.click(saveButton)
         await waitFor(() => {
             expect(screen.getByDisplayValue(/john doe/i)).toBeInTheDocument()
         })
@@ -44,10 +44,13 @@ describe('User Page', () => {
         renderPage()
         const heading = screen.getByRole('heading', { level: 3, name: /User Posts/i });
 
+        // Find the container and guarantee it's not null with an assertion
         const container = heading.parentElement;
-        expect(container).not.toBeNull();
+        if (container === null) {
+            throw new Error('Posts container not found');
+        }
 
-        const utils = within(container!); 
+        const utils = within(container); 
         const postItems = await utils.findByText(/post one/i)
         expect(postItems).toBeInTheDocument()
     })
