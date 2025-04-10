@@ -194,7 +194,7 @@ export default function UserPage() {
     // Loading and error states
     if (isFetchingUser) {
         return (
-            <div style={{ textAlign: 'center', padding: '24px' }}>
+            <div style={{ textAlign: 'center', padding: '24px' }} role="status">
                 <Spin size="large" />
             </div>
         )
@@ -202,7 +202,7 @@ export default function UserPage() {
 
     if (!user) {
         return (
-            <div style={{ padding: '24px' }}>
+            <div style={{ padding: '24px' }} role="status">
                 <Title level={3}>User not found</Title>
             </div>
         )

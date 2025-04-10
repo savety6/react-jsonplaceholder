@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.node.json",
+  "include": [
+    "vitest.config.ts",
+    "eslint.config.js"
+  ],
+  "compilerOptions": {
+    "noEmit": true
+  }
+} 
